@@ -1,3 +1,46 @@
+#Postman-LN
+Postman-LN is a fork of [Postman](https://github.com/a85/POSTMan-Chrome-Extension) for [Learnosity](http://www.learnosity.com) to cover very specific requirements. It  builds upon the great work done by the Postman team, the addition is around *signing* each request so the server side component can check for a security signature and also to ensure that the request variables haven't been tampered with.
+
+##Installation
+Because this is simply a fork from Postman and not an actual app in the Chrome web store, you must clone this repo locally and then install manually to Chrome as an extension.
+
+###git clone
+```
+git clone git@github.com:michaelsharman/POSTMan-Chrome-Extension.git ./postman-ln
+```
+
+###Add to Chrome
+Open a new Chrome tab, click on the customise Chrome icon and go to ```Tools->Extensions```
+
+Check the *Developer mode* checkbox, then click the *Load unpacked extension…* button.
+
+Navigate to the ```postman-ln/chrome``` folder and click *select*.
+
+That's it! In any new tab you'll see *Postman-LN* as an app/extension. Open it up and import your [environments and collections](https://github.com/Learnosity/data/tree/develop/docs/testHarness/postman).
+
+##Request Envelope
+The server side component expects something like the following sample envelope to be sent for each request:
+
+```
+{
+  "security": {
+    "consumer_key": "ABC123",
+    "domain": "localhost",
+    "timestamp": "20130719-2030",
+    "signature": "908c855ac2b52772add2b94e36f1f2eaa7c30c343f6be851acfa50bfaabc6699"
+  },
+  "request": {
+    "limit": 50
+  },
+  "action": "get"
+}
+```
+
+##Request Signing
+The addition to Postman is to automatically sign the entire request (using sha256). This is handled by *environments* which contain the security private key used to complete the verifed signature.
+
+Essentially the app combines the relevant *security* keys (in a set order) as well as the stringified *request* packet and *action* value. This is hashed and added to the *security* packet as a signature before sending to the server.
+
 Postman
 =======
 Postman helps you be more efficient while working with APIs. Postman is a scratch-your-own-itch project. The need for it arose while one of the developers was creating an API for his project. After looking around for a number of tools, nothing felt just right. The primary features added were a history of sent requests and collections.

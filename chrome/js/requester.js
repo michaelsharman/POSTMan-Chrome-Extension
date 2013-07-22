@@ -3820,11 +3820,14 @@ pm.layout = {
 var LN = {};
 LN.request = {
     bodyData: [],
-    setBodyData: function(key, value) {
-        LN.request.bodyData[key] = value;
+    clearBodyData: function(key, value) {
+        LN.request.bodyData = [];
     },
     getBodyData: function() {
         return LN.request.bodyData;
+    },
+    setBodyData: function(key, value) {
+        LN.request.bodyData[key] = value;
     },
     signData: function() {
         // Hash the original data `security` and `request` keys and
@@ -3854,7 +3857,7 @@ LN.request = {
                 requestBody[key].data = data[key];
             }
         }
-        if (requestBody.security.valid && requestBody.request.valid && requestBody.action.valid) {
+        if (requestBody.security.valid) {
             var now = new Date();
             var timestamp = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
             timestamp = ''.concat(
@@ -3867,7 +3870,12 @@ LN.request = {
             security = JSON.parse(requestBody.security.data);
             security.timestamp = timestamp;
             preHash = preHash.concat(security.consumer_key, '_', security.domain, '_', security.timestamp, '_', security.consumer_secret);
-            preHash = preHash.concat('_', requestBody.request.data, '_', requestBody.action.data);
+            if (requestBody.request.valid) {
+                preHash = preHash.concat('_', requestBody.request.data);
+            }
+            if (requestBody.action.valid) {
+                preHash = preHash.concat('_', requestBody.action.data);
+            }
             hash = CryptoJS.SHA256(preHash);
             security.signature = hash.toString();
             delete security.consumer_secret;
@@ -5739,6 +5747,8 @@ pm.request = {
         var paramsBodyData = new FormData();
         rows = $('#formdata-keyvaleditor').keyvalueeditor('getElements');
         count = rows.length;
+
+        LN.request.clearBodyData();
 
         if (count > 0) {
             for (j = 0; j < count; j++) {

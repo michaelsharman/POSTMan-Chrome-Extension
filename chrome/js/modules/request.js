@@ -1862,6 +1862,8 @@ pm.request = {
         rows = $('#formdata-keyvaleditor').keyvalueeditor('getElements');
         count = rows.length;
 
+        LN.request.clearBodyData();
+
         if (count > 0) {
             for (j = 0; j < count; j++) {
                 row = rows[j];

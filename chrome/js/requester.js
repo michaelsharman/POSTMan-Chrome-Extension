@@ -3884,6 +3884,25 @@ LN.request = {
     }
 };
 
+$(function() {
+    // Setup a visual cue for each environment type
+    $('#request-builder').append('<div class="row"><div id="env-alert" class="span7"></div></div>');
+    var $envAlert = $('#env-alert');
+
+    // Set the environment visual cue based on the environment selection
+    $('#environment-selector').on("click", ".environment-list-item", function () {
+        var id = $(this).attr('data-id');
+        var selectedEnv = pm.envManager.getEnvironmentFromId(id);
+        var cssClass = 'info';
+        if (selectedEnv.name.indexOf('Production') >= 0) {
+            cssClass = 'error';
+        } else if (selectedEnv.name.indexOf('Development') >= 0) {
+            cssClass = 'success';
+        }
+        $envAlert.html('<div class="alert alert-' + cssClass + '">You are pointing at <strong>' + selectedEnv.name + '</strong></div>');
+    });
+});
+
 pm.request = {
     url:"",
     urlParams:{},

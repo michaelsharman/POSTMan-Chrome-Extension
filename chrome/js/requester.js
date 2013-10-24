@@ -3869,8 +3869,13 @@ LN.request = {
             );
             security = JSON.parse(requestBody.security.data);
             security.timestamp = timestamp;
-            preHash = preHash.concat(security.consumer_key, '_', security.domain, '_', security.timestamp, '_', security.consumer_secret);
-            if (requestBody.request.valid) {
+            if (security.user_id === undefined) {
+                preHash = preHash.concat(security.consumer_key, '_', security.domain, '_', security.timestamp, '_', security.consumer_secret);
+            } else {
+                preHash = preHash.concat(security.consumer_key, '_', security.domain, '_', security.timestamp, '_', security.user_id, '_', security.consumer_secret);
+            }
+            // Nasty hack to give the ability to not sign requests (a-la author api)
+            if (requestBody.request.valid && data.nosignrequest === undefined) {
                 preHash = preHash.concat('_', requestBody.request.data);
             }
             if (requestBody.action.valid) {

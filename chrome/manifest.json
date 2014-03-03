@@ -1,6 +1,8 @@
 {
-    "name":"__MSG_name__",
-    "version":"0.8.1",
+    "name":"Postman - REST Client (Packaged app)",
+    "short_name": "Postman",
+    "version":"0.9.4.4",
+    "minimum_chrome_version": "28",
     "icons":{
         "16":"icon_16.png",
         "32":"icon_32.png",
@@ -9,22 +11,40 @@
     },
 
     "app":{
-        "launch":{
-            "local_path":"index.html"
+        "background": {
+            "scripts": ["background.js"]
         }
     },
 
-    "default_locale":"en",
-    "permissions":["cookies", "http://*/*", "https://*/*"],
-    "content_scripts":[
-        {
-            "matches":["http://getpostman.com/*", "https://getpostman.com/*"],
-            "js":["js/listener.js"],
-            "run_at":"document_end"
-        }
-    ],
+    "oauth2": {
+      "client_id": "986289894049-gfdof5fk4mcv0igaldjr8g8976d3rgoi.apps.googleusercontent.com",
+      "scopes": [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile"
+      ]
+    },
 
+    "sandbox": {
+      "pages": ["embedded_ga_host.html"],
+      "content_security_policy": "sandbox allow-scripts; script-src https://ssl.google-analytics.com"
+    },
+
+    "default_locale":"en",
+    "permissions":[
+        "http://*/*",
+        "https://*/*",
+        "contextMenus",
+        "unlimitedStorage",
+        "storage",
+        "fileSystem",
+        "fileSystem.write",
+        "identity",
+        "syncFileSystem",
+        {"socket": [
+          "tcp-connect:*:*",
+          "tcp-listen:*:*"
+        ]}
+        ],
     "manifest_version": 2,
-    "content_security_policy": "default-src 'self'; connect-src *; script-src 'self' https://ssl.google-analytics.com https://platform.twitter.com https://apis.google.com; style-src * blob: data: filesystem: 'unsafe-inline'; img-src *; frame-src * http://www.facebook.com https://plusone.google.com https://platform.twitter.com blob: data: filesystem:; font-src * blob: data: filesystem:; media-src *;",
     "offline_enabled":true
 }

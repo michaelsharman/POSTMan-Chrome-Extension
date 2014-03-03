@@ -1,6 +1,6 @@
 {
-  "name": {"message": "Postman-LN – REST Client"},
-  "description": {"message": "Test, develop and document APIs with pleasure! Extended for ease of testing Learnosity APIs"},
+  "name": {"message": "Postman - REST Client"},
+  "description": {"message": "Test, develop and document APIs with pleasure!"},
   "request": {"message": "Request"},
   "debuglink": {"message": "Debug link"},
   "url": {"message": "URL"},
